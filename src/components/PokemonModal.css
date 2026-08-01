@@ -77,3 +77,56 @@
 .modal-abilities li {
   text-transform: capitalize;
 }
+
+.modal-nav {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #fff;
+  font-size: 40px;
+  line-height: 1;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s ease;
+}
+
+.modal-nav:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.modal-nav:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.modal-nav-prev {
+  margin-right: 16px;
+}
+
+.modal-nav-next {
+  margin-left: 16px;
+}
+
+.modal-weaknesses {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0;
+  margin: 0 0 12px 0;
+}
+
+.weakness-badge {
+  background: #fde2e2;
+  color: #b3261e;
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.modal-no-weaknesses {
+  color: #666;
+  font-style: italic;
+  margin: 0 0 12px 0;
+}

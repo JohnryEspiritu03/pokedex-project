@@ -30,7 +30,7 @@ function Home() {
         const id = pokemon.url.split("/").filter(Boolean).pop(); // Extract the Pokemon ID from the URL
         return {
           id: Number(id),
-          name: pokemon.name
+          name: pokemon.name,
         };
       });
       setMasterList(list);
@@ -57,9 +57,8 @@ function Home() {
 
     return sortOrder === "asc" ? comparison : -comparison; // Reverse the comparison for descending order
   });
-  
-  const hasMore = onDisplay < filtered.length; // Check if there are more Pokemon to display based on the current display count and the filtered list length
 
+  const hasMore = onDisplay < filtered.length; // Check if there are more Pokemon to display based on the current display count and the filtered list length
 
   // Reset the number of Pokemon to display to the limit whenever the search query changes
   useEffect(() => {
@@ -69,10 +68,10 @@ function Home() {
 
   useEffect(() => {
     if (masterList.length === 0) return; // If the master list is empty, do not fetch Pokemon data
-    
+
     async function fetchPageDetails() {
       setLoading(true); // Set loading to true before fetching data
-      
+
       const targetSlice = filtered.slice(0, onDisplay); // Get the slice of Pokemon to display based on the current display count
 
       const alreadyLoadedIds = new Set(pokemon.map((p) => p.id)); // Create a set of already loaded Pokemon IDs to avoid duplicates
@@ -94,9 +93,11 @@ function Home() {
       );
 
       const detailMap = new Map(
-        [...pokemon, ...newDetails].map((p) => [p.id, p])
+        [...pokemon, ...newDetails].map((p) => [p.id, p]),
       );
-      const ordered = targetSlice.map((p) => detailMap.get(p.id)).filter(Boolean); // Order the Pokemon details based on the target slice
+      const ordered = targetSlice
+        .map((p) => detailMap.get(p.id))
+        .filter(Boolean); // Order the Pokemon details based on the target slice
 
       setPokemon(ordered); // Update the state with the fetched Pokemon details
       setLoading(false); // Set loading to false after fetching data
@@ -125,7 +126,11 @@ function Home() {
           </select>
         </label>
 
-        <button onClick={() => setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"))}>
+        <button
+          onClick={() =>
+            setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"))
+          }
+        >
           {sortOrder === "asc" ? "Ascending" : "Descending"}
         </button>
       </div>
@@ -148,7 +153,7 @@ function Home() {
 
       {hasMore && (
         <div className="load-more">
-          <button 
+          <button
             onClick={() => setOnDisplay((c) => c + LIMIT)}
             disabled={loading}
           >
@@ -157,7 +162,14 @@ function Home() {
         </div>
       )}
 
-      <PokemonModal id={selectedPokemonId} onClose={() => setSelectedPokemonId(null)} />
+      <PokemonModal
+        id={selectedPokemonId}
+        minId={1}
+        maxId={masterList.length}
+        onClose={() => setSelectedPokemonId(null)}
+        onPrevious={() => setSelectedPokemonId((id) => id - 1)}
+        onNext={() => setSelectedPokemonId((id) => id + 1)}
+      />
     </>
   );
 }

@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import "./PokemonModal.css";
 
-function PokemonModal({id, onClose}) {
+function PokemonModal({id, onClose, minId=1, maxId, onNext, onPrevious}) {
     const [details, setDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -29,6 +29,27 @@ function PokemonModal({id, onClose}) {
                     (entry) => entry.language.name === "en"
                 );
 
+                const typeResponses = await Promise.all(
+                    pokemonData.types.map((t) => fetch(t.type.url).then((res) => res.json()))
+                );
+
+                const multipliers = {};
+                typeResponses.forEach((typeData) => {
+                    typeData.damage_relations.double_damage_from.forEach((type) => {
+                        multipliers[type.name] = (multipliers[type.name] || 1) * 2;
+                    });
+                    typeData.damage_relations.half_damage_from.forEach((type) => {
+                        multipliers[type.name] = (multipliers[type.name] || 1) * 0.5;
+                    });
+                    typeData.damage_relations.no_damage_from.forEach((type) => {
+                        multipliers[type.name] = (multipliers[type.name] || 1) * 0;
+                    });
+                });
+
+                const weaknesses = Object.entries(multipliers)
+                    .filter(([_, multiplier]) => multiplier > 1)
+                    .sort((a, b) => b[1] - a[1]);
+
                 if (cancelled) return;
 
                 setDetails({
@@ -40,6 +61,7 @@ function PokemonModal({id, onClose}) {
                     weight: pokemonData.weight,
                     abilities: pokemonData.abilities,
                     stats: pokemonData.stats,
+                    weaknesses,
                     description: flavorEntry ? flavorEntry.flavor_text.replace(/\f|\n/g, " ") : "No description available.", // Clean up the description text
                 });
             } catch (err){
@@ -58,14 +80,15 @@ function PokemonModal({id, onClose}) {
         };
     }, [id]);
 
-    
+    const canGoPrevious = id != null && id > minId;
+    const canGoNext = id != null && (maxId == null || id < maxId);
 
     // Close on escape key press
     useEffect(() => {
         function handleKeyDown(event) {
-            if (event.key === "Escape") {
-                onClose();
-            }
+            if (event.key === "Escape") onClose();
+            if (event.key === "ArrowLeft" && canGoPrevious) onPrevious();
+            if (event.key === "ArrowRight" && canGoNext) onNext();
         }
 
         window.addEventListener("keydown", handleKeyDown);
@@ -73,12 +96,16 @@ function PokemonModal({id, onClose}) {
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
         };
-    }, [onClose]);
+    }, [onClose, onNext, onPrevious, canGoNext, canGoPrevious]);
 
     if (!id) return null;
 
     return (
         <div className="modal-overlay" onClick={onClose}>
+            <button className="modal-nav modal-nav-prev" onClick={(e) => {e.stopPropagation(); onPrevious();}} disabled={!canGoPrevious} aria-label="Previous Pokemon">
+                &larr;
+            </button>
+
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 <button className="modal-close" onClick={onClose} aria-label="Close Modal">
                     &times;
@@ -109,6 +136,19 @@ function PokemonModal({id, onClose}) {
                             <span>Weight: {details.weight / 10} kg</span>
                         </div>
 
+                        <h3>Weaknesses</h3>
+                        {details.weaknesses.length === 0 ? (
+                            <p className="modal-no-weaknesses">No notable weaknesses.</p>
+                        ) : (
+                            <ul className="modal-weaknesses">
+                                {details.weaknesses.map(([typeName, multiplier]) => (
+                                    <li key={typeName} className="type-badge weakness-badge">
+                                        {typeName} x {multiplier}                                    
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+
                         <h3>Abilities</h3>
                         <ul className="modal-abilities">
                             {details.abilities.map((ability) => (
@@ -131,6 +171,9 @@ function PokemonModal({id, onClose}) {
                     </>
                 )}
             </div>
+            <button className="modal-nav modal-nav-next" onClick={(e) => {e.stopPropagation(); onNext();}} disabled={!canGoNext} aria-label="Next Pokemon">
+                &rarr;
+            </button>
         </div>
     );
 }
