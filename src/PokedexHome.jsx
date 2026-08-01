@@ -1,31 +1,35 @@
-import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import Navbar from './components/Navbar'
-import PokemonCard from './components/PokemonCard';
-import './PokedexHome.css';
+import { useEffect, useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "./assets/vite.svg";
+import heroImg from "./assets/hero.png";
+import Navbar from "./components/Navbar";
+import PokemonCard from "./components/PokemonCard";
+import "./PokedexHome.css";
 
 function Home() {
-  const [pokemon, setPokemon] = useState([]);
-  const [page, setPage] = useState(1);
-  const [totalPokemon, setTotalPokemon] = useState(0);
+  const [pokemon, setPokemon] = useState([]); // State to hold the list of Pokemon
+  const [page, setPage] = useState(1); // State to hold the current page number
+  const [totalPokemon, setTotalPokemon] = useState(0); // State to hold the total number of Pokemon available
 
-  const limit = 10;
-  const offset = (page - 1) * limit;
-  const totalPages = Math.ceil(totalPokemon / limit);
+  const limit = 10; // Number of Pokemon to fetch per page
+  const offset = (page - 1) * limit; // Calculate the offset based on the current page and limit
+  const totalPages = Math.ceil(totalPokemon / limit); // Calculate the total number of pages based on the total number of Pokemon and limit
 
+  // Fetch Pokemon data from the PokeAPI whenever the page state changes
   useEffect(() => {
+    // Function to fetch Pokemon data from the PokeAPI
     async function fetchPokemon() {
       const response = await fetch(
-        `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`
+        `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`,
       );
 
       const data = await response.json();
 
       console.log(data);
 
+      // Fetch detailed information for each Pokemon in the list
       const pokemonList = await Promise.all(
+        // Map over the results and fetch details for each Pokemon
         data.results.map(async (pokemon) => {
           const response = await fetch(pokemon.url);
           const details = await response.json();
@@ -40,12 +44,11 @@ function Home() {
 
             types: details.types,
           };
-        })
+        }),
       );
 
       setPokemon(pokemonList);
       setTotalPokemon(data.count);
-
     }
 
     fetchPokemon();
@@ -53,51 +56,40 @@ function Home() {
 
   return (
     <>
-    <Navbar/>
+      <Navbar />
 
-    <div className="pagination">
-      {[page - 2, page - 1, page + 1, page + 2]
-        .filter((num) => num >= 1 && num <= totalPages)
-        .map((num) => (
-          <button
-            key={num}
-            onClick={() => setPage(num)}
-          >
-            {num}
-          </button>
-      ))}
-      <button
-        onClick={()=>setPage(page-1)}~
-        disabled = {page === 1}
-      >
-        Previous
-      </button>
+      {/* Pagination controls to navigate between pages of Pokemon */}
+      <div className="pagination">
+        {[page - 2, page - 1, page + 1, page + 2]
+          .filter((num) => num >= 1 && num <= totalPages)
+          .map((num) => (
+            <button key={num} onClick={() => setPage(num)}>
+              {num}
+            </button>
+          ))}
+        <button onClick={() => setPage(page - 1)} disabled={page === 1}>
+          Previous
+        </button>
 
-      <span>Page {page}</span>
-      
-      <button
-        onClick={()=>setPage(page + 1)}
-        disabled={page === totalPages}
-      >
-        Next
-      </button>
+        <span>Page {page}</span>
 
-    </div>
+        <button
+          onClick={() => setPage(page + 1)}
+          disabled={page === totalPages}
+        >
+          Next
+        </button>
+      </div>
 
-    <div className="container">
-      <div className="pokemon-grid">
-      {pokemon.map((p) => (
-        <PokemonCard
-          key = {p.id}
-          pokemon= {p}
-        />
-      ))}
-    </div>
-    </div>
-    
-    
+      <div className="container">
+        <div className="pokemon-grid">
+          {pokemon.map((p) => (
+            <PokemonCard key={p.id} pokemon={p} />
+          ))}
+        </div>
+      </div>
     </>
   );
 }
 
-export default Home
+export default Home;
