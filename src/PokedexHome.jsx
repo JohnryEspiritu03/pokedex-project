@@ -9,9 +9,11 @@ import './PokedexHome.css';
 function Home() {
   const [pokemon, setPokemon] = useState([]);
   const [page, setPage] = useState(1);
+  const [totalPokemon, setTotalPokemon] = useState(0);
 
   const limit = 10;
   const offset = (page - 1) * limit;
+  const totalPages = Math.ceil(totalPokemon / limit);
 
   useEffect(() => {
     async function fetchPokemon() {
@@ -42,6 +44,7 @@ function Home() {
       );
 
       setPokemon(pokemonList);
+      setTotalPokemon(data.count);
 
     }
 
@@ -53,8 +56,18 @@ function Home() {
     <Navbar/>
 
     <div className="pagination">
+      {[page - 2, page - 1, page + 1, page + 2]
+        .filter((num) => num >= 1 && num <= totalPages)
+        .map((num) => (
+          <button
+            key={num}
+            onClick={() => setPage(num)}
+          >
+            {num}
+          </button>
+      ))}
       <button
-        onClick={()=>setPage(page-1)}
+        onClick={()=>setPage(page-1)}~
         disabled = {page === 1}
       >
         Previous
@@ -64,6 +77,7 @@ function Home() {
       
       <button
         onClick={()=>setPage(page + 1)}
+        disabled={page === totalPages}
       >
         Next
       </button>
