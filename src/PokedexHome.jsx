@@ -10,14 +10,13 @@ function Home() {
   const [pokemon, setPokemon] = useState([]); // State to hold the list of Pokemon
   const [page, setPage] = useState(1); // State to hold the current page number
   const [totalPokemon, setTotalPokemon] = useState(0); // State to hold the total number of Pokemon available
+  const [search, setSearch] = useState(""); // State to hold the search query
 
   const limit = 10; // Number of Pokemon to fetch per page
   const offset = (page - 1) * limit; // Calculate the offset based on the current page and limit
   const totalPages = Math.ceil(totalPokemon / limit); // Calculate the total number of pages based on the total number of Pokemon and limit
 
-  // Fetch Pokemon data from the PokeAPI whenever the page state changes
-  useEffect(() => {
-    // Function to fetch Pokemon data from the PokeAPI
+  // Function to fetch Pokemon data from the PokeAPI
     async function fetchPokemon() {
       const response = await fetch(
         `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`,
@@ -51,6 +50,41 @@ function Home() {
       setTotalPokemon(data.count);
     }
 
+    async function searchPokemonByNameOrId() {
+      if (!search.trim()) {
+        fetchPokemon();
+        return;
+      }
+      try{
+        const response = await fetch(
+          `https://pokeapi.co/api/v2/pokemon/${search.toLowerCase()}`,
+        );
+
+        if (!response.ok) {
+          alert("Pokemon not found. Please check the name or ID and try again.");
+          return;
+        }
+
+        const details = await response.json();
+
+        setPokemon([{
+          id: details.id,
+          name: details.name,
+          image: `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${details.id
+            .toString()
+            .padStart(3, "0")}.png`,
+          types: details.types,
+        }]);
+      } catch (error) {
+        console.error("Error fetching Pokemon:", error);
+        alert("An error occurred while fetching the Pokemon. Please try again later.");
+      }
+    }
+
+  // Fetch Pokemon data from the PokeAPI whenever the page state changes
+  useEffect(() => {
+    
+
     fetchPokemon();
   }, [page]);
 
@@ -58,13 +92,26 @@ function Home() {
     <>
       <Navbar />
 
+      <input 
+        type="text" 
+        placeholder="Search Pokemon by name or ID..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            searchPokemonByNameOrId();
+          }
+        }}
+      />
+
       {/* Pagination controls to navigate between pages of Pokemon */}
-      <div className="pagination">
-        {[page - 2, page - 1, page + 1, page + 2]
-          .filter((num) => num >= 1 && num <= totalPages)
-          .map((num) => (
-            <button key={num} onClick={() => setPage(num)}>
-              {num}
+      {search.trim() === "" && (
+        <div className="pagination">
+          {[page - 2, page - 1, page + 1, page + 2]
+            .filter((num) => num >= 1 && num <= totalPages)
+            .map((num) => (
+              <button key={num} onClick={() => setPage(num)}>
+                {num}
             </button>
           ))}
         <button onClick={() => setPage(page - 1)} disabled={page === 1}>
@@ -79,7 +126,7 @@ function Home() {
         >
           Next
         </button>
-      </div>
+      </div>)}
 
       <div className="container">
         <div className="pokemon-grid">
