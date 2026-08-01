@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import PokemonCard from "./components/PokemonCard";
 import "./PokedexHome.css";
+import PokemonModal from "./components/PokemonModal";
 
 const LIMIT = 10;
 
@@ -13,6 +14,8 @@ function Home() {
   const [sortBy, setSortBy] = useState("id"); // State to hold the sorting criteria
   const [sortOrder, setSortOrder] = useState("asc"); // State to hold the sorting order
   const [loading, setLoading] = useState(true); // State to indicate if data is being loaded
+
+  const [selectedPokemonId, setSelectedPokemonId] = useState(null); // State to hold the ID of the selected Pokemon for modal display
 
   // Fetch the complete list of Pokemon from the PokeAPI when the component mounts
   useEffect(() => {
@@ -132,7 +135,13 @@ function Home() {
       <div className="container">
         <div className="pokemon-grid">
           {pokemon.map((p) => (
-            <PokemonCard key={p.id} pokemon={p} />
+            <div
+              key={p.id}
+              onClick={() => setSelectedPokemonId(p.id)}
+              style={{ cursor: "pointer" }}
+            >
+              <PokemonCard key={p.id} pokemon={p} />
+            </div>
           ))}
         </div>
       </div>
@@ -148,6 +157,7 @@ function Home() {
         </div>
       )}
 
+      <PokemonModal id={selectedPokemonId} onClose={() => setSelectedPokemonId(null)} />
     </>
   );
 }
