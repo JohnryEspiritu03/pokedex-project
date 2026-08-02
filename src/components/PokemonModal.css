@@ -1,91 +1,203 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 16px;
   z-index: 1000;
 }
 
 .modal-content {
-  background: #fff;
-  border-radius: 12px;
+  --accent-color: #888;
+  background: #1a1a1e;
+  border: 1px solid var(--accent-color);
+  border-radius: 16px;
   padding: 24px;
-  max-width: 600px;
+  max-width: 640px;
   width: 90%;
   max-height: 85vh;
   overflow-y: auto;
   position: relative;
+  box-shadow: 0 0 24px color-mix(in srgb, var(--accent-color) 35%, transparent);
 }
 
 .modal-close {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 14px;
+  right: 14px;
   background: none;
   border: none;
-  color: #333;
+  color: #888;
   font-size: 24px;
   cursor: pointer;
   line-height: 1;
 }
 
+.modal-status,
+.modal-error{
+  color: #ccc;
+  text-align: center;
+}
+
+.modal-columns{
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 24px;
+}
+
+.modal-left{
+  text-align: center;
+  border-right: 1px solid #2a2a2e;
+  padding-right: 24px;
+}
+
+.modal-id{
+  color: #888;
+  font-size: 13px;
+  margin: 0 0  8px;
+}
+
+.modal-image-frame{
+  width: 130px;
+  height: 130px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #2a2a30 0%, #1a1a1e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .modal-image {
-  width: 150px;
-  height: 150px;
-  display: block;
-  margin: 0 auto;
+  width: 80%;
+  height: 80%;
   object-fit: contain;
+}
+
+.model-name{
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 10px;
 }
 
 .modal-types {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   justify-content: center;
-  margin: 8px 0;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
 }
 
 .type-badge {
-  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
   border-radius: 999px;
-  background: #eee;
+  border: 1px solid var(--type-color);
+  background: color(in srgb, var(--type-color) 15%, transparent);
   text-transform: capitalize;
-  font-size: 0.85rem;
+}
+
+.modal-description{
+  color: #aaa;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0 0 16px;
 }
 
 .modal-physical {
   display: flex;
   justify-content: space-around;
-  margin: 12px 0;
+  border-top: 1px solid #2a2a2e;
+  padding-top: 14px;
 }
 
+.stat-label{
+  color: #777;
+  font-size: 11px;
+  margin: 0 0 2px;
+}
+
+.stat-value{
+  color: #eee;
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.modal-right{
+  min-width: 0;
+}
+
+.modal-section-title{
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 10px;
+}
+
+.modal-right h3:not(:first-child){
+  margin-top: 20px;
+}
+
+.modal-weaknesses,
 .modal-abilities,
 .modal-stats {
   list-style: none;
   padding: 0;
-  margin: 0 0 12px 0;
+  margin: 0;
 }
-
-.modal-stats li {
-  display: flex;
-  justify-content: space-between;
+.modal-ability{
+  color: #ccc;
+  font-size: 13px;
   text-transform: capitalize;
-  padding: 2px 0;
+  padding: 4px 0;
 }
 
-.modal-abilities li {
-  text-transform: capitalize;
+.modal-stat {
+  display: grid;
+  grid-template-columns: 80px 1fr 32px;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
 }
 
-.modal-nav {
-  background: rgba(255, 255, 255, 0.15);
+.modal-stat-name {
+  color: #999;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.modal-stat-bar-track {
+  height: 6px;
+  background: #2a2a2e;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.modal-stat-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.modal-stat-value {
+  color: #eee;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: right;
+}
+
+.modal-nav{
+  background: rgba(255, 255, 255, 0.1);
   border: none;
   color: #fff;
-  font-size: 40px;
+  font-size: 32px;
   line-height: 1;
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   cursor: pointer;
   flex-shrink: 0;
@@ -93,11 +205,11 @@
 }
 
 .modal-nav:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .modal-nav:disabled {
-  opacity: 0.25;
+  opacity: 0.2;
   cursor: default;
 }
 
@@ -110,23 +222,40 @@
 }
 
 .modal-weaknesses {
-  list-style: none;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  padding: 0;
-  margin: 0 0 12px 0;
+  justify-content: center;
 }
 
 .weakness-badge {
-  background: #fde2e2;
-  color: #b3261e;
-  text-transform: capitalize;
-  font-weight: 600;
+  justify-content: center;
 }
 
 .modal-no-weaknesses {
-  color: #666;
+  color: #777;
+  font-size: 13px;
   font-style: italic;
-  margin: 0 0 12px 0;
+  margin: 0;
 }
+
+
+
+.modal-abilities li {
+  text-transform: capitalize;
+}
+
+@media (max-width: 700px) {
+  .modal-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-left {
+    border-right: none;
+    border-bottom: 1px solid #2a2a2e;
+    padding-right: 0;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+  }
+}
+
