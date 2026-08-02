@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import PokemonCard from "./components/PokemonCard";
 import "./PokedexHome.css";
 import PokemonModal from "./components/PokemonModal";
+import SearchBar from "./components/SearchBar";
 
 const LIMIT = 10;
 
@@ -66,6 +67,23 @@ function Home() {
     setPokemon([]); // Clear the current list of Pokemon to display
   }, [query, sortBy, sortOrder]);
 
+  const [isAtBottom, setIsAtBottom] = useState(false);
+
+  useEffect(() => {
+    function handleScroll() {
+      const scrolledToBottom =
+        window.innerHeight + window.scrollY >= document.body.offsetHeight - 100; 
+        // 100px threshold so it triggers slightly before the exact pixel-perfect bottom
+
+      setIsAtBottom(scrolledToBottom);
+    }
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // check immediately in case content is short enough to already be at the bottom
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   useEffect(() => {
     if (masterList.length === 0) return; // If the master list is empty, do not fetch Pokemon data
 
@@ -108,32 +126,32 @@ function Home() {
 
   return (
     <>
-      <Navbar />
+      <div className="fixed-header">
+        <Navbar />
 
-      <input
-        type="text"
-        placeholder="Search Pokemon by name or ID..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+        <div className="controls-row">
+          <SearchBar searchTerm={search} onSearchChange={setSearch} />
 
-      <div className="sort-controls">
-        <label>
-          Sort By:
-          <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-            <option value="id">ID</option>
-            <option value="name">Name</option>
-          </select>
-        </label>
+          <div className="sort-controls">
+            <label>
+              Sort By:
+              <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                <option value="id">ID</option>
+                <option value="name">Name</option>
+              </select>
+            </label>
 
-        <button
-          onClick={() =>
-            setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"))
-          }
-        >
-          {sortOrder === "asc" ? "Ascending" : "Descending"}
-        </button>
+            <button
+              onClick={() =>
+                setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"))
+              }
+            >
+              {sortOrder === "asc" ? "Ascending" : "Descending"}
+            </button>
+          </div>
+        </div>
       </div>
+      
 
       {filtered.length === 0 && !loading && <p>No Pokemon match "{search}".</p>}
 
@@ -152,7 +170,7 @@ function Home() {
       </div>
 
       {hasMore && (
-        <div className="load-more">
+        <div className={`load-more ${isAtBottom ? "load-more-floating" : ""}`}>
           <button
             onClick={() => setOnDisplay((c) => c + LIMIT)}
             disabled={loading}

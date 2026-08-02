@@ -1,15 +1,125 @@
 .container {
-    max-width: 1200px;   /* Maximum width of the content */
-    width: 100%;         /* Shrink when the screen is smaller */
-    margin: 0 auto;      /* Center the container */
-    padding: 0 2rem;     /* Left and right spacing */
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 2rem;       
+    padding-top: 130px;    
     box-sizing: border-box;
-    padding-top: 2rem;
 }
-
 .pokemon-grid {
     display: grid;
     grid-template-columns: repeat(5, 200px);
     justify-content: space-between;
     gap: 2rem 1rem;
+}
+.fixed-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 500;
+}
+
+.controls-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 2px 16px;
+  background: #16171d;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); 
+}
+
+.sort-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  padding: 8px 16px;
+  border-radius: 999px;
+  flex-shrink: 0; /* keeps it from getting squeezed by the search bar in the flex row */
+}
+
+.sort-controls label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: #6b6375;
+  font-weight: 500;
+}
+
+.sort-controls select {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid #ddd;
+  background: #6b6375;
+  font-size: 0.9rem;
+  cursor: pointer;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.sort-controls select:hover {
+  background: #eee;
+}
+
+.sort-controls select:focus {
+  border-color: #3b6ce8;
+}
+
+.sort-controls button {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid #3b6ce8;
+  background: #3b6ce8;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sort-controls button:hover {
+  background: #2f57c1;
+}
+
+.sort-controls button:active {
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.load-more-floating {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+}
+
+.load-more-floating button {
+  padding: 12px 28px;
+  border-radius: 999px;
+  border: none;
+  background: #3b6ce8;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.load-more-floating button:hover:not(:disabled) {
+  background: #2f57c1;
+  transform: translateX(-50%) scale(1.03);
+}
+
+.load-more-floating button:disabled {
+  opacity: 0.6;
+  cursor: default;
 }
