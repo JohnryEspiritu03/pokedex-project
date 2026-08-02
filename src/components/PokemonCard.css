@@ -1,9 +1,74 @@
-.card {
-    width: 90%;
-    background-color: gray;
-    padding: .5rem 1rem;
-    border-radius: .8rem;
+.pokemon-card{
+    --background-color: #888;
+    background: #1a1a1e;
+    border: 1px solid var (var(--background-color));
+    border-radius: 14px;
+    padding: 16px;
+    position: relative;
+    box-shadow: 0 0 12px color-mix(in srgb, var(--background-color) 35%, transparent);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
 
+.pokemon-card:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 0 20px color-mix(in srgb, var(--background-color) 55%, transparent);;
+}
+
+.status-dot{
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.card-id{
+    color: #888;
+    font-size: 13px;
+    margin: 0 0 8px;
+}
+
+.card-image-frame{
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 12px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #2a2a30 0%, #1a1a1e 100%);
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-image{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.card-name{
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    margin: 0 0 12px;
+}
+
+.card-types{
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    border-top: 1px solid #2a2a2e;
+    padding-top: 10px;
+}
+
+.type-badge{
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: capitalize;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--type-color);
+    background: color-mix(in srgb, var(--type-color) 15%, transparent);;
 }

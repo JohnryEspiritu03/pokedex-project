@@ -3,8 +3,9 @@
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
-
-    background-color: #16171d;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #13204a;
     color: white;
 }
 

@@ -1,5 +1,6 @@
 .search-bar-floating {
   width: 60%; 
+  max-width: 900px;
 }
 
 .search-bar-floating input {
