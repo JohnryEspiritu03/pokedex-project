@@ -41,31 +41,20 @@ function Home() {
   }, []);
 
   const query = search.trim().toLowerCase(); // Trim and convert the search query to lowercase for case-insensitive matching
-  const filteredUnsorted = query
+  const matches = query
     ? masterList.filter(
         (pokemon) =>
           pokemon.name.includes(query) || pokemon.id.toString().includes(query),
       )
-    : masterList; // Filter the master list based on the search query, or use the complete list if no query is provided
+    : masterList;
 
-  const filtered = [...filteredUnsorted].sort((a, b) => {
-    let comparison = 0;
-    if (sortBy === "id") {
-      comparison = a.id - b.id; // Sort by ID in ascending order
-    } else if (sortBy === "name") {
-      comparison = a.name.localeCompare(b.name); // Sort by name in ascending order
-    }
-
-    return sortOrder === "asc" ? comparison : -comparison; // Reverse the comparison for descending order
-  });
-
-  const hasMore = onDisplay < filtered.length; // Check if there are more Pokemon to display based on the current display count and the filtered list length
+  const hasMore = onDisplay < matches.length; // Check if there are more Pokemon to display based on the current display count and the filtered list length
 
   // Reset the number of Pokemon to display to the limit whenever the search query changes
   useEffect(() => {
     setOnDisplay(LIMIT); // Reset the number of Pokemon to display to the limit
     setPokemon([]); // Clear the current list of Pokemon to display
-  }, [query, sortBy, sortOrder]);
+  }, [query]);
 
   const [isAtBottom, setIsAtBottom] = useState(false);
 
@@ -90,7 +79,7 @@ function Home() {
     async function fetchPageDetails() {
       setLoading(true); // Set loading to true before fetching data
 
-      const targetSlice = filtered.slice(0, onDisplay); // Get the slice of Pokemon to display based on the current display count
+      const targetSlice = matches.slice(0, onDisplay); // Get the slice of Pokemon to display based on the current display count
 
       const alreadyLoadedIds = new Set(pokemon.map((p) => p.id)); // Create a set of already loaded Pokemon IDs to avoid duplicates
       const toFetch = targetSlice.filter((p) => !alreadyLoadedIds.has(p.id)); // Filter out already loaded Pokemon from the target slice
@@ -122,7 +111,17 @@ function Home() {
     }
 
     fetchPageDetails();
-  }, [onDisplay, query, masterList, sortBy, sortOrder]);
+  }, [onDisplay, query, masterList]);
+
+  const displayedPokemon = [...pokemon].sort((a, b) => {
+    let comparison = 0;
+    if (sortBy === "id") {
+      comparison = a.id - b.id;
+    } else if (sortBy === "name") {
+      comparison = a.name.localeCompare(b.name);
+    }
+    return sortOrder === "asc" ? comparison : -comparison;
+  });
 
   return (
     <>
@@ -146,18 +145,26 @@ function Home() {
                 setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"))
               }
             >
-              {sortOrder === "asc" ? "Ascending" : "Descending"}
+              {sortOrder === "asc" ? (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 19V5M12 5l-6 6M12 5l6 6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              ) : (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 5v14M12 19l-6-6M12 19l6-6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              )}
             </button>
           </div>
         </div>
       </div>
       
 
-      {filtered.length === 0 && !loading && <p>No Pokemon match "{search}".</p>}
+      {matches.length === 0 && !loading && <p>No Pokemon match "{search}".</p>}
 
       <div className="container">
         <div className="pokemon-grid">
-          {pokemon.map((p) => (
+          {displayedPokemon.map((p) => (
             <div
               key={p.id}
               onClick={() => setSelectedPokemonId(p.id)}
@@ -188,6 +195,10 @@ function Home() {
         onPrevious={() => setSelectedPokemonId((id) => id - 1)}
         onNext={() => setSelectedPokemonId((id) => id + 1)}
       />
+
+      <footer className="site-footer">
+        <p>Made by Johnry Espiritu</p>
+      </footer>
     </>
   );
 }

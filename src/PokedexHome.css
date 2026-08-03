@@ -5,6 +5,7 @@
   padding: 0 2rem;
   padding-top: 130px;
   box-sizing: border-box;
+  padding-bottom: 4rem;
 }
 .pokemon-grid {
   display: grid;
@@ -48,7 +49,7 @@
   align-items: center;
   gap: 6px;
   font-size: 0.9rem;
-  color: #6b6375;
+  color: #eee;
   font-weight: 500;
 }
 
@@ -57,7 +58,7 @@
   border-radius: 999px;
   border: 1px solid #ddd;
   background: #6b6375;
-  font-size: 0.9rem;
+  font-size: 12px;
   cursor: pointer;
   outline: none;
   box-sizing: border-box;
@@ -68,6 +69,7 @@
 
 .sort-controls select:hover {
   background: #eee;
+  color: #13204a;
 }
 
 .sort-controls select:focus {
@@ -80,15 +82,13 @@
   border: 1px solid #3b6ce8;
   background: #3b6ce8;
   color: #fff;
-  font-size: 0.9rem;
-  font-weight: 500;
   cursor: pointer;
   box-sizing: border-box;
-  transition:
-    background 0.15s ease,
-    box-shadow 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
 }
-
 .sort-controls button:hover {
   background: #2f57c1;
 }
@@ -117,17 +117,23 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
   transition:
     background 0.15s ease,
-    transform 0.15s ease;
 }
 
 .load-more-floating button:hover:not(:disabled) {
   background: #2f57c1;
-  transform: translateX(-50%) scale(1.03);
 }
 
 .load-more-floating button:disabled {
   opacity: 0.6;
   cursor: default;
+}
+
+.site-footer {
+  text-align: right;
+  padding: 24px 16px 32px;
+  color: var(--text);
+  font-size: 0.85rem;
+  opacity: 0.7;
 }
 
 @media (max-width: 1200px) {
@@ -170,4 +176,10 @@
   .container {
     padding-top: 170px;
   }
+}
+
+input,
+select,
+button {
+  font-family: inherit;
 }
