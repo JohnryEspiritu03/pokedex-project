@@ -47,11 +47,13 @@ function PokemonModal({ id, onClose, minId = 1, maxId, onNext, onPrevious }) {
         const speciesData = await speciesResponse.json();
 
         const flavorEntry = speciesData.flavor_text_entries.find(
-          (entry) => entry.language.name === "en"
+          (entry) => entry.language.name === "en",
         );
 
         const typeResponses = await Promise.all(
-          pokemonData.types.map((t) => fetch(t.type.url).then((res) => res.json()))
+          pokemonData.types.map((t) =>
+            fetch(t.type.url).then((res) => res.json()),
+          ),
         );
 
         const multipliers = {};
@@ -136,7 +138,13 @@ function PokemonModal({ id, onClose, minId = 1, maxId, onNext, onPrevious }) {
         aria-label="Previous Pokemon"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path
+            d="M15 18l-6-6 6-6"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </button>
 
@@ -145,7 +153,11 @@ function PokemonModal({ id, onClose, minId = 1, maxId, onNext, onPrevious }) {
         style={{ "--accent-color": accentColor }}
         onClick={(e) => e.stopPropagation()}
       >
-        <button className="modal-close" onClick={onClose} aria-label="Close Modal">
+        <button
+          className="modal-close"
+          onClick={onClose}
+          aria-label="Close Modal"
+        >
           &times;
         </button>
 
@@ -155,10 +167,20 @@ function PokemonModal({ id, onClose, minId = 1, maxId, onNext, onPrevious }) {
         {details && !loading && (
           <div className="modal-columns">
             <div className="modal-left">
-              <p className="modal-id">#{details.id.toString().padStart(3, "0")}</p>
+              <p className="modal-id">
+                #{details.id.toString().padStart(3, "0")}
+              </p>
 
               <div className="modal-image-frame">
-                <img src={details.image} alt={details.name} className="modal-image" />
+                <img
+                  src={details.image}
+                  alt={details.name}
+                  className="modal-image"
+                  onError={(e) => {
+                    e.target.onerror = null; // prevent infinite loop if fallback also fails
+                    e.target.src = "/pokeball.png";
+                  }}
+                />
               </div>
 
               <h2 className="modal-name">
@@ -267,7 +289,13 @@ function PokemonModal({ id, onClose, minId = 1, maxId, onNext, onPrevious }) {
         aria-label="Next Pokemon"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path
+            d="M9 6l6 6-6 6"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </button>
     </div>

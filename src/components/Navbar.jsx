@@ -7,6 +7,7 @@ function Navbar() {
     return(
         <nav className="navbar">
             <div className="logo" onClick={scrollToTop} style={{ cursor: "pointer" }}>
+                <img src="/pokeball.png" alt="" />
                 Pokédex
             </div>
         </nav>

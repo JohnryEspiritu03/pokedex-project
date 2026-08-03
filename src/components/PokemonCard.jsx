@@ -21,50 +21,61 @@ const TYPE_COLORS = {
   fairy: "#ee99ac",
 };
 
-function PokemonCard({pokemon}) {
-    const primaryType = pokemon.types[0].type.name;
-    const backgroundColor = TYPE_COLORS[primaryType] || "#fff";
+function PokemonCard({ pokemon }) {
+  const primaryType = pokemon.types[0].type.name; 
+  const backgroundColor = TYPE_COLORS[primaryType] || "#fff";
 
-    const typeLabel = pokemon.types.map((t) => t.type.name).join(" / ");
+  const typeLabel = pokemon.types.map((t) => t.type.name).join(" / ");
 
-    return(
-        <div className="pokemon-card" style={{ "--background-color": backgroundColor }}>
-            <span className="status-dot" style={{ background: backgroundColor }}></span>
-            
-            <p className="card-id">#{pokemon.id.toString().padStart(3, "0")}</p>
-            
-            <div className="card-image-frame">
-                <img 
-                src={pokemon.image} 
-                alt={pokemon.name} 
-                className="card-image"
-            />
-            </div>
-            
+  return (
+    <div
+      className="pokemon-card"
+      style={{ "--background-color": backgroundColor }}
+    >
+      <span
+        className="status-dot"
+        style={{ background: backgroundColor }}
+      ></span>
 
-            <h2 className="card-name">{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h2>
+      <p className="card-id">#{pokemon.id.toString().padStart(3, "0")}</p>
 
-            <div className="card-types">
-                {pokemon.types.map((t) => {
-                    const typeName = t.type.name;
-                    const typeColor = TYPE_COLORS[typeName] || "#888";
-                    return(
-                        <span
-                            key={typeName}
-                            className="type-badge"
-                            style={{
-                                "--type-color": typeColor,
-                                color: typeColor,
-                                borderColor: typeColor
-                            }}
-                        >
-                            {typeName}
-                        </span>
-                    )
-                })}
-            </div>
-        </div>
-    );
+      <div className="card-image-frame">
+        <img
+          src={pokemon.image}
+          alt={pokemon.name}
+          className="card-image"
+          onError={(e) => {
+            e.target.onerror = null; // prevent infinite loop if fallback also fails
+            e.target.src = "/pokeball.png";
+          }}
+        />
+      </div>
+
+      <h2 className="card-name">
+        {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
+      </h2>
+
+      <div className="card-types">
+        {pokemon.types.map((t) => {
+          const typeName = t.type.name;
+          const typeColor = TYPE_COLORS[typeName] || "#888";
+          return (
+            <span
+              key={typeName}
+              className="type-badge"
+              style={{
+                "--type-color": typeColor,
+                color: typeColor,
+                borderColor: typeColor,
+              }}
+            >
+              {typeName}
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
 export default PokemonCard;
