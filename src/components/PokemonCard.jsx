@@ -22,7 +22,7 @@ const TYPE_COLORS = {
 };
 
 function PokemonCard({ pokemon }) {
-  const primaryType = pokemon.types[0].type.name; 
+  const primaryType = pokemon.types[0].type.name;
   const backgroundColor = TYPE_COLORS[primaryType] || "#fff";
 
   const typeLabel = pokemon.types.map((t) => t.type.name).join(" / ");

@@ -61,8 +61,8 @@ function Home() {
   useEffect(() => {
     function handleScroll() {
       const scrolledToBottom =
-        window.innerHeight + window.scrollY >= document.body.offsetHeight - 100; 
-        // 100px threshold so it triggers slightly before the exact pixel-perfect bottom
+        window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+      // 100px threshold so it triggers slightly before the exact pixel-perfect bottom
 
       setIsAtBottom(scrolledToBottom);
     }
@@ -134,7 +134,10 @@ function Home() {
           <div className="sort-controls">
             <label>
               Sort By:
-              <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+              >
                 <option value="id">ID</option>
                 <option value="name">Name</option>
               </select>
@@ -147,18 +150,29 @@ function Home() {
             >
               {sortOrder === "asc" ? (
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 19V5M12 5l-6 6M12 5l6 6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <path
+                    d="M12 19V5M12 5l-6 6M12 5l6 6"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               ) : (
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 5v14M12 19l-6-6M12 19l6-6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <path
+                    d="M12 5v14M12 19l-6-6M12 19l6-6"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               )}
             </button>
           </div>
         </div>
       </div>
-      
 
       {matches.length === 0 && !loading && <p>No Pokemon match "{search}".</p>}
 
