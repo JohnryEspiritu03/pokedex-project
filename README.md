@@ -1,16 +1,68 @@
-# React + Vite
+# Pokédex
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple and responsive Pokédex web application built with **React** and **Vite** that allows users to browse, search, and view Pokémon information using the **PokéAPI**.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Browse Pokémon
+- Search Pokémon by **name** or **ID**
+- Display Pokémon:
+  - Official artwork
+  - Name
+  - ID
+  - Type(s)
+- Responsive card-based layout
+- Dynamic data fetched from the PokéAPI
+- Fast development powered by Vite
+- Sort Pokémon by **name** or **ID**
+- View more Pokémon information through a pop-up modal
 
-## React Compiler
+## Technologies Used
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React
+- Vite
+- JavaScript (ES6+)
+- CSS3
+- PokéAPI
+- Fetch API
 
-## Expanding the ESLint configuration
+## APIs Used
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Pokémon Data
+
+https://pokeapi.co/
+
+Example:
+
+```
+https://pokeapi.co/api/v2/pokemon/25
+```
+
+### Pokémon Images
+
+```
+https://assets.pokemon.com/assets/cms2/img/pokedex/full/{id}.png
+```
+
+Example:
+
+```
+https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png
+```
+
+## Screenshots
+
+![Home Page](./screenshots/pokedex-1.png)
+![Home Page](./screenshots/pokedex-2.png)
+![Pokemon Info Modal](./screenshots/pokemon-info.png)
+
+## Acknowledgements
+
+- PokéAPI for providing the Pokémon data
+- Pokémon.com for the Pokémon artwork
+- React
+- Vite
+
+## License
+
+This project is for educational purposes.
